@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>符文之地斗地主 原型</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app game-root">
+      <section class="tabletop game-canvas">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">符文牌局</p>
+            <h1>符文之地斗地主</h1>
+          </div>
+          <div class="status-strip">
+            <span id="phaseLabel">英雄选择</span>
+          </div>
+          <div class="hud-tools">
+            <button id="guideBtn" class="hud-tool-btn" type="button">玩法</button>
+            <button id="catalogBtn" class="hud-tool-btn" type="button">图鉴</button>
+            <button id="settingsBtn" class="hud-tool-btn" type="button">设置</button>
+          </div>
+          <div id="tableState" class="table-state"></div>
+        </header>
+
+        <section id="heroSelect" class="hero-select"></section>
+
+        <section id="gameBoard" class="game-board hidden">
+          <aside class="panel city-panel">
+            <p class="eyebrow">地主城邦被动</p>
+            <h2 id="cityName">等待抢地主</h2>
+            <p id="cityEffect">抢到地主后激活绑定城邦效果。</p>
+            <div class="bottom-cards" id="bottomCards"></div>
+          </aside>
+
+          <section class="arena">
+            <div class="opponents">
+              <div id="player1" class="player-seat"></div>
+              <div id="player2" class="player-seat"></div>
+            </div>
+
+            <div class="center-play">
+              <div class="pile-header">
+                <span>已打出的牌</span>
+                <strong id="lastPlay">等待出牌</strong>
+              </div>
+              <div id="playPile" class="play-pile"></div>
+              <div id="tableCue" class="table-cue hidden"></div>
+              <div id="roundInfo" class="round-info"></div>
+              <div id="roundProgress" class="round-progress" aria-live="polite"></div>
+              <div id="decisionCoach" class="decision-coach" aria-live="polite"></div>
+              <div id="playHistory" class="play-history"></div>
+            </div>
+
+            <div class="self-zone">
+              <div class="panel action-panel">
+                <p class="eyebrow">操作</p>
+                <div id="opponentSummary" class="opponent-summary"></div>
+                <div id="turnHint" class="turn-hint">请选择英雄</div>
+                <div id="bidActions" class="actions hidden">
+                  <button id="skipBidBtn">不抢</button>
+                  <button id="callBidBtn" class="primary">抢地主</button>
+                </div>
+                <div id="playActions" class="actions hidden">
+                  <button id="skillBtn">技能</button>
+                  <button id="hintBtn">提示</button>
+                  <button id="passBtn">不要</button>
+                  <button id="playBtn" class="primary">出牌</button>
+                </div>
+                <div id="skillReadiness" class="skill-readiness"></div>
+                <div id="comboHint" class="combo-hint">选牌后显示牌型</div>
+                <div id="selectedPreview" class="selected-preview" aria-live="polite"></div>
+                <button id="clearSelectionBtn" class="selection-box" type="button" disabled>
+                  <span>已选</span>
+                  <strong id="selectedLabel">0 张</strong>
+                </button>
+              </div>
+
+              <div id="player0" class="player-seat self"></div>
+            </div>
+          </section>
+        </section>
+
+        <section class="log-wrap">
+          <div id="log" class="log"></div>
+        </section>
+
+        <div id="eventToast" class="event-toast hidden" aria-live="polite"></div>
+
+        <div id="landlordReveal" class="landlord-reveal hidden" aria-live="polite">
+          <div class="landlord-reveal-card">
+            <div id="landlordRevealPortrait" class="hero-portrait reveal-portrait"></div>
+            <div class="reveal-copy">
+              <span>地主已确定</span>
+              <strong id="landlordRevealTitle">地主 · 城邦</strong>
+              <p id="landlordRevealText">城邦被动已激活</p>
+            </div>
+            <div id="landlordRevealCards" class="reveal-bottom-cards"></div>
+          </div>
+        </div>
+
+        <div id="guideOverlay" class="guide-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="guideTitle">
+          <article class="guide-card">
+            <button id="guideCloseBtn" class="guide-close" type="button" aria-label="关闭玩法引导">×</button>
+            <p class="eyebrow">新手引导</p>
+            <h2 id="guideTitle">三人牌桌</h2>
+            <p id="guideBody"></p>
+            <div id="guideDots" class="guide-dots" aria-hidden="true"></div>
+            <div class="guide-actions">
+              <button id="guidePrevBtn" type="button">上一步</button>
+              <button id="guideNextBtn" class="primary" type="button">下一步</button>
+            </div>
+          </article>
+        </div>
+
+        <div id="catalogOverlay" class="catalog-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="catalogTitle">
+          <article class="catalog-panel">
+            <button id="catalogCloseBtn" class="guide-close" type="button" aria-label="关闭英雄图鉴">×</button>
+            <header class="catalog-head">
+              <p class="eyebrow">英雄与城邦图鉴</p>
+              <h2 id="catalogTitle">符文之地英雄机制</h2>
+            </header>
+            <div id="catalogList" class="catalog-list"></div>
+            <section id="catalogDetail" class="catalog-detail"></section>
+          </article>
+        </div>
+
+        <div id="settingsOverlay" class="settings-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+          <article class="settings-panel">
+            <button id="settingsCloseBtn" class="guide-close" type="button" aria-label="关闭设置">×</button>
+            <p class="eyebrow">牌局设置</p>
+            <h2 id="settingsTitle">试玩控制</h2>
+            <div class="settings-row">
+              <div>
+                <strong>技能语音</strong>
+                <span id="muteLabel">开启</span>
+              </div>
+              <button id="muteBtn" type="button">静音</button>
+            </div>
+            <label class="settings-row volume-row">
+              <div>
+                <strong>音量</strong>
+                <span id="volumeLabel">85%</span>
+              </div>
+              <input id="volumeSlider" type="range" min="0" max="100" value="85" />
+            </label>
+            <div class="settings-row speed-row">
+              <div>
+                <strong>AI 速度</strong>
+                <span id="speedLabel">正常</span>
+              </div>
+              <div class="speed-toggle" role="group" aria-label="AI 速度">
+                <button id="speedNormalBtn" type="button" data-speed="normal">正常</button>
+                <button id="speedFastBtn" type="button" data-speed="fast">快速</button>
+              </div>
+            </div>
+            <div class="settings-actions">
+              <button id="newRoundBtn" type="button">重新开局</button>
+              <button id="backSelectBtn" class="primary" type="button">返回选人</button>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <dialog id="modal">
+        <form method="dialog">
+          <h3 id="modalTitle">提示</h3>
+          <p id="modalBody"></p>
+          <div id="modalChoices" class="modal-choices"></div>
+          <button id="modalCloseBtn" class="primary">确定</button>
+        </form>
+      </dialog>
+
+      <div id="skillBurst" class="skill-burst hidden" aria-live="polite">
+        <div class="skill-burst-card">
+          <div id="skillBurstPortrait" class="hero-portrait burst-portrait"></div>
+          <div>
+            <span id="skillBurstCaster">英雄</span>
+            <strong id="skillBurstName">技能发动</strong>
+          </div>
+        </div>
+      </div>
+    </main>
+    <script src="game.js"></script>
+  </body>
+</html>
