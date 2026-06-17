@@ -1612,7 +1612,11 @@ function avatarStyle(hero) {
   const row = Math.floor(index / 4);
   const x = col === 0 ? 0 : col === 3 ? 100 : col * 33.333;
   const y = row === 0 ? 0 : row === 2 ? 100 : 50;
-  return `--avatar-x:${x}%;--avatar-y:${y}%;`;
+  const color = hero.color || "#24344f";
+  const mark = String(hero.mark || hero.name?.slice(0, 1) || "?")
+    .replace(/\\/g, "\\\\")
+    .replace(/"/g, '\\"');
+  return `--avatar-x:${x}%;--avatar-y:${y}%;--hero-color:${color};--hero-mark:"${mark}";`;
 }
 
 function renderCard(card) {
