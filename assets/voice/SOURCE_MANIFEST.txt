@@ -1,0 +1,6 @@
+garen.ogg	44	人在塔在	./yuyin/德玛西亚之力/人在塔在.mp3
+darius.mp3	7	只有我才能带领我们走向胜利	./yuyin/诺克萨斯之手/只有我才能带领我们走向胜利.mp3
+ashe.ogg	61	世间万物皆系于一箭之上	./yuyin/寒冰射手/pick.mp3
+jinx.mp3	25	笑声	./yuyin/暴走萝莉/笑声.mp3
+yasuo.mp3	3	死亡如风，常伴吾身	./yuyin/亚索/原皮肤/死亡如风，常伴吾身_漫幻宙.mp3
+thresh.ogg	69	我们要怎样进行这令人愉悦的折磨呢	./yuyin/魂锁典狱长/我们要怎样进行这令人愉悦的折磨呢_voice_champion_412_pick.mp3
