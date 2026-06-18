@@ -243,8 +243,16 @@ function makeDeck() {
   return shuffle(deck);
 }
 
+function compareCardsAsc(a, b) {
+  return a.value - b.value || a.suit.localeCompare(b.suit);
+}
+
+function compareCardsDesc(a, b) {
+  return b.value - a.value || b.suit.localeCompare(a.suit);
+}
+
 function sortHand(hand) {
-  hand.sort((a, b) => a.value - b.value || a.suit.localeCompare(b.suit));
+  hand.sort(compareCardsDesc);
 }
 
 function log(message) {
@@ -502,7 +510,7 @@ function isConsecutive(values, minLength, allowGap = false) {
 }
 
 function classify(cards, player, options = {}) {
-  const sorted = [...cards].sort((a, b) => a.value - b.value);
+  const sorted = [...cards].sort(compareCardsAsc);
   const values = sorted.map((card) => card.value);
   const groups = countGroups(sorted).sort((a, b) => a.cards.length - b.cards.length || a.value - b.value);
   const size = sorted.length;
@@ -766,6 +774,7 @@ function completePlay(playerId, cards, combo) {
   resetHintCycle();
   clearSingleUseBuffs(player);
   handleAfterPlay(playerId, cards, combo, beatPrevious, previous);
+  if (state.phase === "over") return;
   log(`${player.name} 打出 ${combo.label}：${formatCards(cards)}。`);
   const playFeedback = describePlayFeedback(player, cards, combo, previous, beatPrevious);
   if (player.hand.length === 0) return endGame(playerId);
@@ -827,10 +836,12 @@ function handleAfterPlay(playerId, cards, combo, beatPrevious, previous) {
   if (player.buff.dariusExecute && beatPrevious) {
     if (discardLowest(player, "德莱厄斯处决")) showEvent("德莱厄斯处决：弃掉最小手牌", "skill", { center: true, seat: player.id });
     delete player.buff.dariusExecute;
+    if (checkGameEndAfterHandMutation(player.id)) return;
   }
   if (player.buff.mushroomed) {
     if (discardRandomLow(player, "提莫蘑菇")) showEvent("提莫蘑菇触发：随机弃牌", "skill", { center: true, seat: player.id });
     delete player.buff.mushroomed;
+    if (checkGameEndAfterHandMutation(player.id)) return;
   }
   if (player.id === state.landlord && player.hero.id === "kaisa" && !state.fieldFlags.kaisa && player.hand.length < 5) {
     state.fieldFlags.kaisa = true;
@@ -867,6 +878,7 @@ function passTurn(playerId) {
         showPassiveEvent("比尔吉沃特分赃", "比尔吉沃特分赃触发，地主弃掉一张最小手牌。", state.landlord);
       }
     }
+    if (checkGameEndAfterHandMutation(state.landlord)) return;
     state.turn = state.current.player;
     const leadPlayer = state.players[state.turn];
     state.current = null;
@@ -943,16 +955,17 @@ function scheduleAiTurn(delay = getAiDelay()) {
   window.clearTimeout(state.aiTimer);
   window.clearTimeout(state.aiCueTimer);
   const player = state.players[state.turn];
+  const scheduledPlayerId = player.id;
   state.aiThinking = state.turn;
   render();
   markSeatFeedback(player.id, "info");
   const cueDelay = Math.min(320, Math.max(90, Math.floor(delay / 2)));
   state.aiCueTimer = window.setTimeout(() => {
-    if (state.phase === "play" && state.aiThinking === player.id) {
+    if (state.phase === "play" && state.turn === scheduledPlayerId && state.aiThinking === player.id) {
       showTableCue(`${player.name} · ${player.hero.name} 正在思考`, "thinking", delay + 420);
     }
   }, cueDelay);
-  state.aiTimer = window.setTimeout(aiTurn, delay);
+  state.aiTimer = window.setTimeout(() => aiTurn(scheduledPlayerId), delay);
 }
 
 function clearAiThinking() {
@@ -963,11 +976,13 @@ function clearAiThinking() {
   state.aiThinking = null;
 }
 
-function aiTurn() {
-  if (state.phase !== "play" || state.turn === 0) return;
+function aiTurn(expectedPlayerId = state.turn) {
+  if (state.phase !== "play" || state.turn === 0 || state.turn !== expectedPlayerId) return;
   state.aiThinking = null;
   const player = state.players[state.turn];
+  if (!player || !player.hand.length) return;
   maybeAiSkill(player);
+  if (state.phase !== "play" || !player.hand.length) return;
   const play = chooseAiPlay(player);
   if (play) completePlay(player.id, play.cards, play.combo);
   else passTurn(player.id);
@@ -985,7 +1000,7 @@ function chooseAiPlay(player) {
 }
 
 function generateCandidates(player) {
-  const hand = [...player.hand].sort((a, b) => a.value - b.value);
+  const hand = [...player.hand].sort(compareCardsAsc);
   const groups = countGroups(hand).sort((a, b) => a.value - b.value);
   const candidates = [];
   for (const card of hand) addCandidate([card]);
@@ -1018,7 +1033,7 @@ function addRuns(hand, candidates, player) {
   const unique = countGroups(hand)
     .filter((group) => group.value < 15)
     .map((group) => group.cards[0])
-    .sort((a, b) => a.value - b.value);
+    .sort(compareCardsAsc);
   for (let start = 0; start < unique.length; start += 1) {
     for (let len = 4; len <= Math.min(8, unique.length - start); len += 1) {
       const cards = unique.slice(start, start + len);
@@ -1037,6 +1052,7 @@ function useUserSkill() {
   if (state.turn !== 0 || state.players[0].usedSkill) return;
   resetHintCycle();
   useSkill(0, false);
+  if (state.phase === "over") return;
   render();
 }
 
@@ -1105,6 +1121,7 @@ function useSkill(playerId, isAi) {
     default:
       break;
   }
+  checkGameEndAfterHandMutation(player.id);
 }
 
 function playSkillPresentation(player) {
@@ -1188,7 +1205,8 @@ function pirateSwap(player) {
   for (const target of state.players.filter((candidate) => candidate.id !== player.id)) {
     if (!target.hand.length || !player.hand.length) continue;
     const stolen = target.hand.splice(Math.floor(Math.random() * target.hand.length), 1)[0];
-    const returned = player.hand.splice(0, 1)[0];
+    const returned = takeLowestCard(player);
+    if (!returned) continue;
     player.hand.push(stolen);
     target.hand.push(returned);
     sortHand(player.hand);
@@ -1198,11 +1216,19 @@ function pirateSwap(player) {
   log(`${player.name} 发动枪林弹雨，和两名对手交换了随机手牌。`);
 }
 
+function takeLowestCard(player) {
+  if (!player.hand.length) return null;
+  const lowest = [...player.hand].sort(compareCardsAsc)[0];
+  player.hand = player.hand.filter((card) => card.id !== lowest.id);
+  return lowest;
+}
+
 function discardLowest(player, reason) {
   if (!player.hand.length) return false;
-  sortHand(player.hand);
-  const [card] = player.hand.splice(0, 1);
+  const card = takeLowestCard(player);
+  if (!card) return false;
   state.discard.push(card);
+  sortHand(player.hand);
   markSeatFeedback(player.id, "warning");
   log(`${reason}：${player.name} 弃掉 ${formatCards([card])}。`);
   return true;
@@ -1227,7 +1253,16 @@ function checkFieldWarnings(player) {
   }
 }
 
+function checkGameEndAfterHandMutation(playerId) {
+  const player = state.players[playerId];
+  if (!player || state.phase !== "play") return false;
+  if (player.hand.length > 0) return false;
+  endGame(playerId);
+  return true;
+}
+
 function endGame(winnerId) {
+  clearAiThinking();
   state.phase = "over";
   state.winner = winnerId;
   const landlordWon = winnerId === state.landlord;

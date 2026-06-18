@@ -6302,3 +6302,246 @@ body {
 .hero-portrait.tiny::after {
   font-size: clamp(0.46rem, 1vmin, 0.62rem);
 }
+
+/* Phone landscape final fit: preserve the 16:9 table without crushing controls. */
+@media (orientation: landscape) and (max-height: 540px) and (max-width: 980px) {
+  :root {
+    --safe-bottom: max(12px, env(safe-area-inset-bottom, 0px));
+    --hud-h: 8.2%;
+  }
+
+  .game-root {
+    padding: 0;
+  }
+
+  .game-canvas {
+    border-radius: 0;
+  }
+
+  .topbar {
+    height: 8.2%;
+    min-height: 38px;
+    grid-template-columns: 17% 10% minmax(0, 1fr);
+    gap: 0.45vmin;
+    padding: 0.45vmin 0.7vmin;
+  }
+
+  .topbar h1 {
+    font-size: clamp(0.9rem, 2.5vmin, 1.2rem);
+  }
+
+  .topbar .eyebrow,
+  .state-chip span,
+  .hud-tool-btn {
+    font-size: clamp(0.48rem, 1.25vmin, 0.66rem);
+  }
+
+  .topbar .table-state {
+    gap: 0.35vmin;
+  }
+
+  .state-chip {
+    min-height: 30px;
+    padding: 0.32vmin 0.46vmin;
+  }
+
+  .state-chip strong {
+    margin-top: 0;
+    font-size: clamp(0.54rem, 1.38vmin, 0.75rem);
+  }
+
+  .hud-tools {
+    gap: 0.35vmin;
+  }
+
+  .hud-tool-btn {
+    min-width: 4.8vmin;
+    min-height: 3.2vmin;
+    padding: 0.36vmin 0.6vmin;
+  }
+
+  .game-board {
+    inset: calc(var(--hud-h) + 0.4vmin) 0.55vmin calc(1.2vmin + var(--safe-bottom));
+  }
+
+  .opponents {
+    top: 0;
+    left: 0.4vmin;
+    right: 0.4vmin;
+  }
+
+  .opponents .player-seat {
+    width: 22.5%;
+    min-height: 15.8vmin;
+    padding: 0.55vmin;
+    grid-template-columns: 4.9vmin minmax(0, 1fr);
+    gap: 0.45vmin;
+  }
+
+  .opponents .hero-portrait {
+    width: clamp(36px, 6.8vmin, 48px);
+  }
+
+  .opponents .seat-head strong,
+  .opponents .hand-count strong {
+    font-size: clamp(0.66rem, 1.45vmin, 0.86rem);
+  }
+
+  .opponents .compact-skill .hero-skill-button {
+    height: 4.4vmin;
+    padding: 0.35vmin 0.45vmin;
+  }
+
+  .compact-skill .hero-skill-button i {
+    width: 2.7vmin;
+    height: 2.7vmin;
+  }
+
+  .city-panel {
+    top: 0;
+    right: 24%;
+    width: 24%;
+    height: 7.2%;
+    min-width: 20vmin;
+    padding: 0.35vmin 0.55vmin;
+  }
+
+  .city-panel p {
+    -webkit-line-clamp: 1;
+    max-height: 1.35em;
+  }
+
+  .center-play {
+    top: 17.5%;
+    height: 43.5%;
+    width: 53%;
+  }
+
+  .play-pile {
+    min-height: 11vmin;
+    padding: 0.65vmin;
+  }
+
+  .play-pile .card {
+    width: clamp(34px, 5.7vmin, 48px);
+    height: clamp(48px, 8vmin, 68px);
+  }
+
+  .decision-coach {
+    width: min(94%, 82vmin);
+    min-height: 4.7vmin;
+    grid-template-columns: minmax(0, 1fr) auto;
+    margin-top: 0.15vmin;
+    padding: 0.38vmin 0.55vmin;
+  }
+
+  .decision-coach p,
+  .coach-chips i:nth-child(n + 3),
+  .actions button small,
+  .selected-preview strong,
+  .skill-readiness span,
+  .skill-tooltip small {
+    display: none !important;
+  }
+
+  .self-zone {
+    bottom: max(1vmin, var(--safe-bottom));
+    height: 35%;
+    gap: 0.45vmin;
+  }
+
+  .action-panel {
+    width: min(92%, 112vmin);
+    min-height: 5.9vmin;
+    grid-template-columns: minmax(13vmin, 0.8fr) minmax(10vmin, 0.65fr) minmax(13vmin, 0.78fr) minmax(31vmin, auto) auto !important;
+    gap: 0.42vmin;
+    padding: 0.45vmin 0.6vmin;
+  }
+
+  #bidActions {
+    grid-template-columns: minmax(8vmin, 1fr) minmax(11vmin, 1.15fr);
+  }
+
+  #playActions {
+    grid-template-columns: repeat(3, minmax(7.2vmin, 1fr)) minmax(9.6vmin, 1.2fr);
+  }
+
+  .actions {
+    gap: 0.38vmin;
+  }
+
+  .actions button,
+  #bidActions button,
+  #playActions button {
+    min-width: 0;
+    min-height: 4.6vmin;
+    padding: 0.35vmin 0.42vmin;
+    white-space: nowrap;
+  }
+
+  .actions button .action-label {
+    font-size: clamp(0.62rem, 1.6vmin, 0.86rem);
+    line-height: 1;
+  }
+
+  .turn-hint,
+  .combo-hint,
+  .selected-preview,
+  .skill-readiness {
+    min-height: 4.4vmin;
+    padding: 0.3vmin 0.48vmin;
+    font-size: clamp(0.52rem, 1.25vmin, 0.7rem);
+  }
+
+  .player-seat.self {
+    grid-template-columns: minmax(15vmin, 18vmin) minmax(0, 1fr);
+    gap: 0.45vmin 0.65vmin;
+    padding: 0.55vmin 0.7vmin;
+  }
+
+  .player-seat.self .hero-portrait {
+    width: clamp(40px, 7.4vmin, 56px);
+  }
+
+  .self-skill .hero-skill-button {
+    min-height: 8.2vmin;
+    padding: 0.55vmin;
+  }
+
+  .self-skill .hero-skill-button i {
+    width: 4.2vmin;
+    height: 4.2vmin;
+  }
+
+  .voice-line {
+    min-height: 3.7vmin;
+    padding: 0.32vmin 0.6vmin;
+  }
+
+  .player-seat.self .hand {
+    padding: 0.4vmin 0.7vmin max(1.3vmin, var(--safe-bottom));
+    transform: translateY(-0.6vmin);
+  }
+
+  .player-seat.self .card {
+    width: clamp(36px, 6.6vmin, 52px);
+    height: clamp(51px, 9.25vmin, 74px);
+    margin-left: -2.65vmin;
+  }
+
+  .player-seat.self .card.selected {
+    transform: translateY(-1.75vmin);
+  }
+
+  .card-corner b {
+    font-size: clamp(0.46rem, 1.2vmin, 0.62rem);
+  }
+
+  .card-face {
+    font-size: clamp(1rem, 2.45vmin, 1.45rem);
+  }
+
+  .log-wrap {
+    display: none;
+  }
+}
