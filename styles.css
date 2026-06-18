@@ -6542,6 +6542,142 @@ body {
   }
 
   .log-wrap {
-    display: none;
+    display: block;
+  }
+}
+
+/* Usability fix: prevent bottom controls from colliding with the self skill card. */
+.player-seat.self {
+  grid-template-columns: minmax(18vmin, 22vmin) minmax(0, 1fr) minmax(13vmin, 16vmin);
+}
+
+.player-seat.self .seat-head,
+.player-seat.self .self-skills,
+.player-seat.self .seat-last-action {
+  grid-column: 1;
+}
+
+.voice-line,
+.player-seat.self .hand {
+  grid-column: 2;
+}
+
+.self-skill {
+  grid-column: 3;
+  z-index: 12;
+  justify-self: stretch;
+}
+
+.self-skill .hero-skill-button {
+  min-width: 0;
+}
+
+.action-panel {
+  z-index: 18;
+  width: min(62%, 86vmin);
+  margin-right: min(15vmin, 12%);
+}
+
+.selected-preview,
+.skill-readiness {
+  min-width: 0;
+}
+
+/* Usability fix: make the lower-left action log a real scrollable history. */
+.log-wrap {
+  z-index: 22;
+  width: min(31vmin, 320px);
+  pointer-events: auto;
+}
+
+.log {
+  max-height: min(14vmin, 128px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-right: 1.05vmin;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(201, 154, 58, 0.7) rgba(4, 8, 18, 0.48);
+}
+
+.log::-webkit-scrollbar {
+  width: 0.55vmin;
+}
+
+.log::-webkit-scrollbar-track {
+  background: rgba(4, 8, 18, 0.5);
+  border-radius: 999px;
+}
+
+.log::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(255, 230, 166, 0.9), rgba(201, 154, 58, 0.7));
+}
+
+.log div:nth-child(n + 3) {
+  display: block;
+}
+
+/* Usability fix: opponent skill explanations must escape compact cards. */
+.opponents,
+.opponents .player-seat,
+.skill-button-wrap {
+  overflow: visible;
+}
+
+.opponents .skill-button-wrap.open,
+.opponents .skill-button-wrap:hover {
+  z-index: 80;
+}
+
+.opponents .skill-tooltip {
+  z-index: 90;
+  width: min(34vmin, 360px);
+  max-width: 34vw;
+  pointer-events: none;
+}
+
+.opponents #player1 .skill-tooltip {
+  left: 0;
+  right: auto;
+}
+
+.opponents #player2 .skill-tooltip {
+  left: auto;
+  right: 0;
+}
+
+.hero-skill-button::before {
+  border-radius: 0.75vmin;
+}
+
+@media (orientation: landscape) and (max-height: 540px) and (max-width: 980px) {
+  .player-seat.self {
+    grid-template-columns: minmax(13vmin, 16vmin) minmax(0, 1fr) minmax(10vmin, 12vmin);
+  }
+
+  .action-panel {
+    width: min(72%, 91vmin);
+    margin-right: min(11vmin, 10%);
+  }
+
+  .self-skill .hero-skill-button span {
+    font-size: clamp(0.46rem, 1.16vmin, 0.62rem);
+  }
+
+  .log-wrap {
+    left: 0.65vmin;
+    bottom: max(0.8vmin, var(--safe-bottom));
+    width: min(25vmin, 220px);
+  }
+
+  .log {
+    max-height: 10.5vmin;
+    padding: 0.45vmin 0.75vmin;
+    font-size: clamp(0.46rem, 1.08vmin, 0.62rem);
+  }
+
+  .opponents .skill-tooltip {
+    width: min(40vmin, 300px);
+    max-width: 44vw;
   }
 }
