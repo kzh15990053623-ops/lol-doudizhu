@@ -1702,7 +1702,7 @@ function avatarStyle(hero) {
   const mark = String(hero.mark || hero.name?.slice(0, 1) || "?")
     .replace(/\\/g, "\\\\")
     .replace(/"/g, '\\"');
-  return `--avatar-x:${x}%;--avatar-y:${y}%;--hero-color:${color};--hero-mark:"${mark}";`;
+  return `--avatar-url:url("assets/portraits/${hero.id}.jpg");--avatar-x:${x}%;--avatar-y:${y}%;--hero-color:${color};--hero-mark:"${mark}";`;
 }
 
 function renderCard(card) {

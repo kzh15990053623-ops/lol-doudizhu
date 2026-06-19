@@ -6546,6 +6546,22 @@ body {
   }
 }
 
+/* Final portrait reliability pass: use small per-hero files instead of mobile atlas cropping. */
+.hero-portrait {
+  background-color: var(--hero-color, #24344f);
+  background-image:
+    var(--avatar-url),
+    radial-gradient(circle at 32% 18%, rgba(255, 255, 255, 0.28), transparent 28%),
+    linear-gradient(145deg, var(--hero-color, #24344f), #07101f 74%) !important;
+  background-size: cover, cover, cover !important;
+  background-position: center, center, center !important;
+  background-repeat: no-repeat !important;
+}
+
+.hero-portrait::after {
+  opacity: 0.82;
+}
+
 /* Usability fix: prevent bottom controls from colliding with the self skill card. */
 .player-seat.self {
   grid-template-columns: minmax(18vmin, 22vmin) minmax(0, 1fr) minmax(13vmin, 16vmin);
