@@ -6558,6 +6558,27 @@ body {
   background-repeat: no-repeat !important;
 }
 
+.hero-portrait img {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  border-radius: inherit;
+}
+
+.hero-portrait img[src=""],
+.hero-portrait img:not([src]) {
+  display: none;
+}
+
+.hero-portrait::before,
+.hero-portrait::after {
+  z-index: 1;
+}
+
 .hero-portrait::after {
   opacity: 0.82;
 }

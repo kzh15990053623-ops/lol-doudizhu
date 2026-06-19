@@ -355,7 +355,7 @@ function showPassiveEvent(title, message, targetId) {
 function showLandlordReveal(player) {
   const reveal = el("landlordReveal");
   if (!reveal) return;
-  el("landlordRevealPortrait").setAttribute("style", avatarStyle(player.hero));
+  setHeroPortraitElement(el("landlordRevealPortrait"), player.hero);
   el("landlordRevealTitle").textContent = `${player.name} · ${player.hero.city}`;
   el("landlordRevealText").textContent = `${player.hero.name} 成为地主，城邦被动已激活`;
   el("landlordRevealCards").innerHTML = state.bottom.map((card) => renderPlayingCard(card)).join("");
@@ -387,7 +387,7 @@ function setupHeroSelect() {
             <h2>${hero.name}</h2>
             <div class="city">${hero.city}</div>
           </div>
-          <div class="hero-portrait large" style="${avatarStyle(hero)}"></div>
+          ${renderHeroPortrait(hero, "large")}
         </div>
         <div class="hero-summary">
           <span>主动</span>
@@ -1140,7 +1140,7 @@ function showSkillBurst(player) {
   if (!burst) return;
   el("skillBurstCaster").textContent = `${player.name} · ${player.hero.name}`;
   el("skillBurstName").textContent = SKILL_NAMES[player.hero.id] ?? "技能发动";
-  el("skillBurstPortrait").setAttribute("style", avatarStyle(player.hero));
+  setHeroPortraitElement(el("skillBurstPortrait"), player.hero);
   burst.classList.remove("hidden", "play");
   void burst.offsetWidth;
   burst.classList.add("play");
@@ -1300,7 +1300,7 @@ function renderResultSummary(winner, landlord, winnerSide) {
   return `
     <section class="result-panel">
       <div class="result-hero">
-        <div class="hero-portrait result-portrait" style="${avatarStyle(winner.hero)}"></div>
+        ${renderHeroPortrait(winner.hero, "result-portrait")}
         <div>
           <span>获胜阵营</span>
           <strong>${winnerSide}</strong>
@@ -1406,14 +1406,14 @@ function renderCatalog() {
   list.innerHTML = HEROES.map(
     (hero) => `
       <button type="button" class="catalog-card ${hero.id === selected.id ? "active" : ""}" data-catalog-hero="${hero.id}">
-        <div class="hero-portrait tiny" style="${avatarStyle(hero)}"></div>
+        ${renderHeroPortrait(hero, "tiny")}
         <span>${hero.name}</span>
         <small>${hero.city}</small>
       </button>
     `,
   ).join("");
   detail.innerHTML = `
-    <div class="catalog-portrait hero-portrait" style="${avatarStyle(selected)}"></div>
+    ${renderHeroPortrait(selected, "catalog-portrait")}
     <div class="catalog-detail-copy">
       <p class="eyebrow">${selected.city}</p>
       <h3>${selected.name}</h3>
@@ -1551,7 +1551,7 @@ function renderSeats() {
     seat.innerHTML = `
       <div class="seat-head">
         <div class="seat-profile">
-          <div class="hero-portrait" style="${avatarStyle(player.hero)}"></div>
+          ${renderHeroPortrait(player.hero)}
           <div>
             <strong>${active ? "▶ " : ""}${player.name} · ${player.hero.name}</strong>
             <div class="meta">${player.hero.city} · ${thinking ? "思考中" : player.usedSkill ? "技能已用" : "技能可用"}</div>
@@ -1690,6 +1690,28 @@ function closeSkillInspect() {
   panel.removeAttribute("data-owner");
   panel.removeAttribute("style");
   return true;
+}
+
+function heroPortraitSrc(hero) {
+  return `assets/portraits/${hero.id}.jpg`;
+}
+
+function renderHeroPortrait(hero, className = "") {
+  const classes = ["hero-portrait", className].filter(Boolean).join(" ");
+  const label = `${hero.name}头像`;
+  return `
+    <div class="${classes}" style="${avatarStyle(hero)}" data-hero-id="${hero.id}" data-mark="${hero.mark || ""}">
+      <img src="${heroPortraitSrc(hero)}" alt="${label}" loading="eager" decoding="async" />
+    </div>
+  `;
+}
+
+function setHeroPortraitElement(node, hero) {
+  if (!node || !hero) return;
+  node.setAttribute("style", avatarStyle(hero));
+  node.dataset.heroId = hero.id;
+  node.dataset.mark = hero.mark || "";
+  node.innerHTML = `<img src="${heroPortraitSrc(hero)}" alt="${hero.name}头像" loading="eager" decoding="async" />`;
 }
 
 function avatarStyle(hero) {
@@ -1897,7 +1919,7 @@ function renderOpponentSummary() {
     .map(
       (player) => `
       <div class="opponent-chip">
-        <div class="hero-portrait tiny" style="${avatarStyle(player.hero)}"></div>
+        ${renderHeroPortrait(player.hero, "tiny")}
         <span>${player.name} · ${player.hero.name}</span>
         <strong>${player.hand.length}</strong>
       </div>
