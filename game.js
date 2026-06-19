@@ -704,10 +704,12 @@ function closeSkillTooltips() {
     item.classList.remove("open");
     item.querySelector(".hero-skill-button")?.setAttribute("aria-expanded", "false");
   });
-  return openItems.length > 0;
+  const panelClosed = closeSkillInspect();
+  return openItems.length > 0 || panelClosed;
 }
 
 function handleGlobalClick(event) {
+  if (event.target.closest?.("#skillInspectPanel")) return;
   if (event.target.closest?.(".skill-button-wrap")) return;
   closeSkillTooltips();
 }
@@ -1580,12 +1582,8 @@ function renderSeats() {
   document.querySelectorAll(".hero-skill-button").forEach((node) => {
     node.addEventListener("click", (event) => {
       event.stopPropagation();
-      const wrap = node.closest(".skill-button-wrap");
-      document.querySelectorAll(".skill-button-wrap.open").forEach((item) => {
-        if (item !== wrap) item.classList.remove("open");
-      });
-      const isOpen = wrap?.classList.toggle("open");
-      node.setAttribute("aria-expanded", String(Boolean(isOpen)));
+      const ownerId = Number(node.dataset.skillOwner);
+      openSkillInspect(ownerId, node);
     });
   });
 }
@@ -1639,6 +1637,59 @@ function skillStatusText(player) {
   if (player.buff.skillBlocked) return "禁用";
   if (player.usedSkill) return "已使用";
   return "可用";
+}
+
+function openSkillInspect(playerId, sourceButton) {
+  const player = state.players[playerId];
+  const panel = el("skillInspectPanel");
+  if (!player || !panel) return;
+  const wasOpenForSamePlayer = !panel.classList.contains("hidden") && panel.dataset.owner === String(playerId);
+  closeSkillTooltips();
+  if (wasOpenForSamePlayer) return;
+  sourceButton?.setAttribute("aria-expanded", "true");
+  sourceButton?.closest(".skill-button-wrap")?.classList.add("open");
+  panel.dataset.owner = String(playerId);
+  panel.innerHTML = `
+    <div class="inspect-head">
+      <span>${player.hero.city}</span>
+      <strong>${player.hero.name} · ${SKILL_NAMES[player.hero.id] ?? "主动技能"}</strong>
+    </div>
+    <div class="inspect-state ${player.usedSkill ? "used" : player.buff.skillBlocked ? "disabled" : "ready"}">${skillStatusText(player)}</div>
+    <p>类型：主动技能</p>
+    <p>${player.hero.skill}</p>
+  `;
+  panel.classList.remove("hidden");
+  positionSkillInspect(panel, sourceButton);
+}
+
+function positionSkillInspect(panel, sourceButton) {
+  const canvas = document.querySelector(".game-canvas");
+  if (!canvas || !sourceButton) return;
+  const canvasRect = canvas.getBoundingClientRect();
+  const buttonRect = sourceButton.getBoundingClientRect();
+  const panelRect = panel.getBoundingClientRect();
+  const gap = Math.max(8, canvasRect.width * 0.008);
+  let left = buttonRect.left - canvasRect.left;
+  let top = buttonRect.bottom - canvasRect.top + gap;
+  if (left + panelRect.width > canvasRect.width - gap) {
+    left = buttonRect.right - canvasRect.left - panelRect.width;
+  }
+  if (top + panelRect.height > canvasRect.height - gap) {
+    top = buttonRect.top - canvasRect.top - panelRect.height - gap;
+  }
+  left = Math.max(gap, Math.min(left, canvasRect.width - panelRect.width - gap));
+  top = Math.max(gap, Math.min(top, canvasRect.height - panelRect.height - gap));
+  panel.style.left = `${left}px`;
+  panel.style.top = `${top}px`;
+}
+
+function closeSkillInspect() {
+  const panel = el("skillInspectPanel");
+  if (!panel || panel.classList.contains("hidden")) return false;
+  panel.classList.add("hidden");
+  panel.removeAttribute("data-owner");
+  panel.removeAttribute("style");
+  return true;
 }
 
 function avatarStyle(hero) {

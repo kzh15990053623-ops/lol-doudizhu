@@ -6681,3 +6681,215 @@ body {
     max-width: 44vw;
   }
 }
+
+/* Final mobile usability pass: stable skill details, log scrolling, and bottom controls. */
+.skill-tooltip {
+  display: none !important;
+}
+
+.skill-inspect-panel {
+  position: absolute;
+  z-index: 96;
+  width: min(34vmin, 360px);
+  max-width: min(42vw, 360px);
+  display: grid;
+  gap: 0.55vmin;
+  padding: 1vmin 1.1vmin;
+  border: 1px solid rgba(201, 154, 58, 0.72);
+  border-radius: 1.1vmin;
+  color: #dcecff;
+  background:
+    radial-gradient(circle at 14% 0%, rgba(58, 167, 255, 0.24), transparent 42%),
+    linear-gradient(180deg, rgba(11, 18, 34, 0.98), rgba(3, 7, 17, 0.96));
+  box-shadow:
+    inset 0 0 2.2vmin rgba(139, 92, 246, 0.11),
+    0 0 3vmin rgba(0, 0, 0, 0.56),
+    0 0 2.2vmin rgba(58, 167, 255, 0.2);
+  pointer-events: auto;
+}
+
+.skill-inspect-panel .inspect-head {
+  display: grid;
+  gap: 0.18vmin;
+  min-width: 0;
+}
+
+.skill-inspect-panel .inspect-head span {
+  color: #64d7ff;
+  font-size: clamp(0.58rem, 1.05vmin, 0.72rem);
+  font-weight: 900;
+}
+
+.skill-inspect-panel .inspect-head strong {
+  color: #ffd879;
+  font-size: clamp(0.82rem, 1.45vmin, 1rem);
+  line-height: 1.15;
+}
+
+.skill-inspect-panel .inspect-state {
+  justify-self: start;
+  border: 1px solid rgba(58, 167, 255, 0.42);
+  border-radius: 999px;
+  padding: 0.18vmin 0.65vmin;
+  color: #9bf0ff;
+  background: rgba(17, 38, 76, 0.68);
+  font-size: clamp(0.52rem, 0.95vmin, 0.66rem);
+  font-weight: 950;
+}
+
+.skill-inspect-panel .inspect-state.used,
+.skill-inspect-panel .inspect-state.disabled {
+  color: #aab5c5;
+  border-color: rgba(154, 165, 184, 0.35);
+  background: rgba(29, 34, 46, 0.72);
+}
+
+.skill-inspect-panel p {
+  margin: 0;
+  color: #d7e5f6;
+  font-size: clamp(0.62rem, 1.08vmin, 0.78rem);
+  line-height: 1.38;
+}
+
+.log-wrap {
+  z-index: 34;
+  left: max(1vmin, var(--safe-left));
+  bottom: calc(max(1.2vmin, var(--safe-bottom)) + 1.2vmin);
+  width: min(29vmin, 300px);
+  pointer-events: auto;
+}
+
+.log {
+  max-height: min(15vmin, 136px);
+  overflow-y: auto;
+  touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  padding: 0.75vmin 1vmin;
+}
+
+.log div:nth-child(n + 3) {
+  display: block !important;
+}
+
+.action-panel {
+  justify-self: center;
+  align-self: end;
+  width: min(58%, 82vmin);
+  margin-right: min(16vmin, 15%);
+}
+
+.actions button {
+  overflow: hidden;
+}
+
+.actions button .action-label,
+.actions button span,
+.actions button strong {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (orientation: landscape) and (max-height: 540px) and (max-width: 980px) {
+  .skill-inspect-panel {
+    width: min(46vmin, 320px);
+    max-width: 48vw;
+    padding: 0.82vmin 0.92vmin;
+  }
+
+  .skill-inspect-panel p:nth-of-type(1) {
+    display: none;
+  }
+
+  .self-zone {
+    bottom: max(1.4vmin, var(--safe-bottom));
+    height: 34%;
+  }
+
+  .player-seat.self {
+    grid-template-columns: minmax(12vmin, 15vmin) minmax(0, 1fr) minmax(9.5vmin, 11.5vmin) !important;
+    padding-left: 0.65vmin;
+    padding-right: 0.65vmin;
+  }
+
+  .self-skill .hero-skill-button {
+    min-height: 8.6vmin;
+    padding: 0.45vmin;
+  }
+
+  .self-skill .hero-skill-button i {
+    width: 3.8vmin;
+    height: 3.8vmin;
+  }
+
+  .self-skill .hero-skill-button em {
+    display: none;
+  }
+
+  .action-panel {
+    width: min(61%, 78vmin) !important;
+    margin-right: min(13vmin, 13%) !important;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr) auto !important;
+    gap: 0.35vmin;
+  }
+
+  .action-panel .eyebrow,
+  #opponentSummary,
+  .combo-hint,
+  .skill-readiness,
+  .selected-preview {
+    display: none !important;
+  }
+
+  .turn-hint {
+    min-width: 0;
+    min-height: 4.2vmin;
+    padding: 0.32vmin 0.5vmin;
+  }
+
+  #bidActions,
+  #playActions {
+    min-width: 0;
+  }
+
+  #playActions {
+    grid-template-columns: repeat(4, minmax(6.2vmin, 1fr)) !important;
+  }
+
+  #bidActions {
+    grid-template-columns: repeat(2, minmax(8.4vmin, 1fr)) !important;
+  }
+
+  .actions button,
+  #bidActions button,
+  #playActions button {
+    min-height: 4.55vmin;
+    padding: 0.32vmin 0.36vmin;
+  }
+
+  .actions button small {
+    display: none !important;
+  }
+
+  .actions button .action-label {
+    font-size: clamp(0.58rem, 1.5vmin, 0.8rem);
+  }
+
+  #clearSelectionBtn {
+    min-width: 8.4vmin;
+    padding: 0.32vmin 0.45vmin;
+  }
+
+  .log-wrap {
+    left: max(0.75vmin, var(--safe-left));
+    bottom: calc(max(0.9vmin, var(--safe-bottom)) + 8.6vmin);
+    width: min(22vmin, 190px);
+  }
+
+  .log {
+    max-height: 12.5vmin;
+    padding: 0.55vmin 0.68vmin;
+    font-size: clamp(0.48rem, 1.08vmin, 0.62rem);
+  }
+}
