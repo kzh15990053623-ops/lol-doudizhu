@@ -6562,6 +6562,352 @@ body {
   opacity: 0.82;
 }
 
+/* Phone browser landscape mode: address bars leave a very short viewport. */
+@media (orientation: landscape) and (max-height: 620px) {
+  html,
+  body,
+  .game-root {
+    width: 100vw;
+    height: 100dvh;
+    overflow: hidden !important;
+  }
+
+  .game-canvas {
+    width: 100vw !important;
+    height: 100dvh !important;
+    max-width: none !important;
+    max-height: none !important;
+    aspect-ratio: auto !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+  }
+
+  .topbar {
+    height: 12.5% !important;
+    min-height: 42px !important;
+    grid-template-columns: minmax(15vmin, 20vmin) auto auto minmax(0, 1fr) !important;
+    gap: 0.45vmin !important;
+    padding: 0.55vmin 0.8vmin !important;
+  }
+
+  .topbar h1 {
+    font-size: clamp(0.82rem, 2.9vmin, 1.18rem) !important;
+    line-height: 0.98;
+  }
+
+  .topbar .eyebrow {
+    font-size: clamp(0.46rem, 1.3vmin, 0.6rem) !important;
+  }
+
+  .status-strip {
+    min-width: 9vmin;
+  }
+
+  .status-strip span {
+    min-height: 4.2vmin;
+    padding: 0.35vmin 0.8vmin;
+    font-size: clamp(0.62rem, 1.65vmin, 0.86rem);
+    white-space: normal;
+    line-height: 1.05;
+  }
+
+  .hud-tools {
+    gap: 0.25vmin !important;
+  }
+
+  .hud-tool-btn {
+    min-width: 4.8vmin !important;
+    min-height: 3.5vmin !important;
+    padding: 0.22vmin 0.5vmin !important;
+    font-size: clamp(0.46rem, 1.25vmin, 0.62rem) !important;
+  }
+
+  .topbar .table-state {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 0.32vmin !important;
+  }
+
+  .state-chip {
+    min-height: 4.7vmin !important;
+    padding: 0.32vmin 0.48vmin !important;
+    overflow: hidden;
+  }
+
+  .state-chip span {
+    font-size: clamp(0.44rem, 1.08vmin, 0.58rem) !important;
+  }
+
+  .state-chip strong {
+    margin-top: 0;
+    font-size: clamp(0.52rem, 1.25vmin, 0.72rem) !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .game-board {
+    inset: calc(12.5% + 0.4vmin) 0.75vmin calc(0.75vmin + var(--safe-bottom)) 0.75vmin !important;
+  }
+
+  .arena {
+    grid-template-columns: 20.5% minmax(0, 1fr) 20.5% !important;
+    grid-template-rows: 24% 42% 34% !important;
+    gap: 0.65vmin !important;
+  }
+
+  #player1,
+  #player2 {
+    height: 92% !important;
+    margin-top: 0.35vmin !important;
+  }
+
+  .opponents .player-seat,
+  #player1,
+  #player2 {
+    min-width: 0 !important;
+    min-height: 0 !important;
+    padding: 0.55vmin !important;
+    grid-template-columns: minmax(4.8vmin, 5.8vmin) minmax(0, 1fr) !important;
+    grid-auto-rows: min-content !important;
+    gap: 0.35vmin 0.48vmin !important;
+    writing-mode: horizontal-tb !important;
+    text-orientation: mixed !important;
+  }
+
+  .opponents .seat-head {
+    grid-column: 1 / -1;
+    display: grid !important;
+    grid-template-columns: minmax(4.8vmin, 5.8vmin) minmax(0, 1fr) auto !important;
+    align-items: center !important;
+    gap: 0.45vmin !important;
+    margin: 0 !important;
+  }
+
+  .opponents .seat-profile {
+    display: contents !important;
+  }
+
+  .opponents .hero-portrait {
+    width: clamp(30px, 5.8vmin, 42px) !important;
+    grid-column: 1;
+  }
+
+  .opponents .seat-profile > div {
+    grid-column: 2;
+    min-width: 0;
+  }
+
+  .opponents .seat-head strong,
+  .opponents .meta {
+    display: block;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    line-height: 1.08;
+  }
+
+  .opponents .seat-head strong {
+    font-size: clamp(0.56rem, 1.55vmin, 0.76rem) !important;
+  }
+
+  .opponents .meta {
+    font-size: clamp(0.44rem, 1.12vmin, 0.58rem) !important;
+  }
+
+  .opponents .role-tag {
+    grid-column: 3;
+    padding: 0.12vmin 0.45vmin;
+    font-size: clamp(0.44rem, 1.12vmin, 0.58rem);
+  }
+
+  .opponents .hand-count,
+  .opponents .seat-last-action,
+  .opponents .compact-skill {
+    grid-column: 1 / -1 !important;
+    min-width: 0;
+  }
+
+  .opponents .hand-count {
+    min-height: 3.8vmin;
+    padding: 0.25vmin 0.45vmin;
+  }
+
+  .opponents .hand-count strong {
+    font-size: clamp(0.72rem, 1.8vmin, 0.94rem) !important;
+  }
+
+  .opponents .seat-last-action {
+    display: none !important;
+  }
+
+  .opponents .compact-skill .hero-skill-button {
+    height: 4.4vmin !important;
+    min-height: 4.4vmin !important;
+    padding: 0.28vmin 0.42vmin !important;
+  }
+
+  .opponents .compact-skill .hero-skill-button i {
+    width: 2.6vmin !important;
+    height: 2.6vmin !important;
+  }
+
+  .opponents .compact-skill .hero-skill-button span {
+    font-size: clamp(0.46rem, 1.16vmin, 0.62rem) !important;
+  }
+
+  .center-play {
+    padding: 0.7vmin !important;
+    gap: 0.45vmin !important;
+  }
+
+  .pile-header,
+  .play-pile,
+  .round-info,
+  .decision-coach,
+  .play-history {
+    width: min(94%, 74vmin) !important;
+  }
+
+  .play-pile {
+    min-height: 9vmin !important;
+    padding: 0.7vmin !important;
+  }
+
+  .center-prompt strong {
+    font-size: clamp(1rem, 3.2vmin, 1.5rem) !important;
+  }
+
+  .city-panel {
+    top: 0.25vmin !important;
+    right: 22% !important;
+    width: 25% !important;
+    height: 7.2% !important;
+    min-width: 20vmin !important;
+    padding: 0.32vmin 0.55vmin !important;
+  }
+
+  .city-panel p {
+    -webkit-line-clamp: 1 !important;
+    max-height: 1.3em !important;
+  }
+
+  .self-zone {
+    height: 34.5% !important;
+    bottom: max(0.7vmin, var(--safe-bottom)) !important;
+    gap: 0.4vmin !important;
+  }
+
+  .player-seat.self {
+    grid-template-columns: minmax(12vmin, 15vmin) minmax(0, 1fr) minmax(9vmin, 11vmin) !important;
+    padding: 0.5vmin 0.65vmin !important;
+    gap: 0.35vmin 0.55vmin !important;
+  }
+
+  .player-seat.self .hero-portrait {
+    width: clamp(34px, 6.4vmin, 48px) !important;
+  }
+
+  .voice-line {
+    min-height: 3.4vmin !important;
+    padding: 0.26vmin 0.5vmin !important;
+  }
+
+  .player-seat.self .hand {
+    padding-bottom: max(1vmin, var(--safe-bottom)) !important;
+  }
+
+  .player-seat.self .card {
+    width: clamp(30px, 6.2vmin, 48px) !important;
+    height: clamp(43px, 8.7vmin, 68px) !important;
+    margin-left: -2.45vmin !important;
+  }
+
+  .self-skill .hero-skill-button {
+    min-height: 8.2vmin !important;
+    padding: 0.38vmin !important;
+  }
+
+  .self-skill .hero-skill-button i {
+    width: 3.5vmin !important;
+    height: 3.5vmin !important;
+  }
+
+  .self-skill .hero-skill-button em {
+    display: none !important;
+  }
+
+  .action-panel {
+    width: min(63%, 82vmin) !important;
+    margin-right: min(12vmin, 12%) !important;
+    padding: 0.34vmin 0.5vmin !important;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1.4fr) auto !important;
+    gap: 0.32vmin !important;
+  }
+
+  .action-panel .eyebrow,
+  #opponentSummary,
+  .combo-hint,
+  .skill-readiness,
+  .selected-preview {
+    display: none !important;
+  }
+
+  .turn-hint {
+    min-height: 4vmin !important;
+    padding: 0.28vmin 0.45vmin !important;
+    font-size: clamp(0.5rem, 1.28vmin, 0.68rem) !important;
+  }
+
+  #playActions {
+    grid-template-columns: repeat(4, minmax(5.8vmin, 1fr)) !important;
+  }
+
+  #bidActions {
+    grid-template-columns: repeat(2, minmax(8vmin, 1fr)) !important;
+  }
+
+  .actions {
+    gap: 0.3vmin !important;
+  }
+
+  .actions button,
+  #bidActions button,
+  #playActions button {
+    min-height: 4.2vmin !important;
+    padding: 0.26vmin 0.34vmin !important;
+  }
+
+  .actions button small {
+    display: none !important;
+  }
+
+  .actions button .action-label {
+    font-size: clamp(0.54rem, 1.42vmin, 0.74rem) !important;
+  }
+
+  #clearSelectionBtn {
+    min-width: 7.4vmin !important;
+    padding: 0.28vmin 0.38vmin !important;
+  }
+
+  .log-wrap {
+    left: max(0.55vmin, var(--safe-left)) !important;
+    bottom: calc(max(0.65vmin, var(--safe-bottom)) + 7.8vmin) !important;
+    width: min(18vmin, 170px) !important;
+  }
+
+  .log {
+    max-height: 11vmin !important;
+    padding: 0.45vmin 0.58vmin !important;
+    font-size: clamp(0.42rem, 0.98vmin, 0.56rem) !important;
+  }
+
+  .skill-inspect-panel {
+    width: min(42vmin, 320px) !important;
+    max-width: 45vw !important;
+  }
+}
+
 /* Usability fix: prevent bottom controls from colliding with the self skill card. */
 .player-seat.self {
   grid-template-columns: minmax(18vmin, 22vmin) minmax(0, 1fr) minmax(13vmin, 16vmin);
