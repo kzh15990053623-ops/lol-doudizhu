@@ -6583,6 +6583,30 @@ body {
   opacity: 0.82;
 }
 
+/* Final hero-select portrait fix: keep portraits square, not banner-cropped. */
+.hero-choice-card .hero-card-top {
+  min-height: clamp(64px, 13vmin, 122px);
+  align-items: start;
+}
+
+.hero-choice-card .hero-portrait.large {
+  position: relative !important;
+  right: auto !important;
+  top: auto !important;
+  width: clamp(64px, 11.5vmin, 112px) !important;
+  height: clamp(64px, 11.5vmin, 112px) !important;
+  aspect-ratio: 1 / 1 !important;
+  flex: 0 0 auto;
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+.hero-choice-card .hero-portrait.large img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+
 /* Phone browser landscape mode: address bars leave a very short viewport. */
 @media (orientation: landscape) and (max-height: 620px) {
   html,
@@ -6926,6 +6950,27 @@ body {
   .skill-inspect-panel {
     width: min(42vmin, 320px) !important;
     max-width: 45vw !important;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 620px) {
+  .self-zone {
+    height: 100% !important;
+    min-height: 0 !important;
+    align-self: stretch !important;
+    grid-template-rows: auto minmax(0, 1fr) !important;
+  }
+
+  .player-seat.self {
+    min-height: 0 !important;
+    height: 100% !important;
+    overflow: visible !important;
+  }
+
+  .player-seat.self .hand {
+    align-self: end !important;
+    min-height: 0 !important;
+    transform: none !important;
   }
 }
 
