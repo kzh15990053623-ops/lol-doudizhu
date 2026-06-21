@@ -709,6 +709,10 @@ function closeSkillTooltips() {
 }
 
 function handleGlobalClick(event) {
+  if (event.target.closest?.("[data-close-skill-inspect]")) {
+    closeSkillTooltips();
+    return;
+  }
   if (event.target.closest?.("#skillInspectPanel")) return;
   if (event.target.closest?.(".skill-button-wrap")) return;
   closeSkillTooltips();
@@ -1047,20 +1051,21 @@ function addRuns(hand, candidates, player) {
 
 function maybeAiSkill(player) {
   if (player.usedSkill || player.buff.skillBlocked || Math.random() > 0.36) return;
-  useSkill(player.id, true);
+  return useSkill(player.id, true);
 }
 
 function useUserSkill() {
   if (state.turn !== 0 || state.players[0].usedSkill) return;
   resetHintCycle();
-  useSkill(0, false);
+  const ended = useSkill(0, false);
   if (state.phase === "over") return;
+  if (ended) return;
   render();
 }
 
 function useSkill(playerId, isAi) {
   const player = state.players[playerId];
-  if (player.usedSkill || player.buff.skillBlocked) return;
+  if (player.usedSkill || player.buff.skillBlocked) return false;
   player.usedSkill = true;
   playSkillPresentation(player);
   const enemies = state.players.filter((candidate) => candidate.id !== playerId);
@@ -1123,7 +1128,7 @@ function useSkill(playerId, isAi) {
     default:
       break;
   }
-  checkGameEndAfterHandMutation(player.id);
+  return checkGameEndAfterHandMutation(player.id);
 }
 
 function playSkillPresentation(player) {
@@ -1623,12 +1628,7 @@ function renderSkillButton(player, isSelf = false) {
         <span>${SKILL_NAMES[player.hero.id] ?? "主动技能"}</span>
         <em>${statusText}</em>
       </button>
-      <div class="skill-tooltip">
-        <strong>${player.hero.name} · ${SKILL_NAMES[player.hero.id] ?? "主动技能"}</strong>
-        <span>类型：主动</span>
-        <p>${player.hero.skill}</p>
-        <small>状态：${statusText}</small>
-      </div>
+      <small class="skill-view-hint">点击查看</small>
     </div>
   `;
 }
@@ -1649,7 +1649,9 @@ function openSkillInspect(playerId, sourceButton) {
   sourceButton?.setAttribute("aria-expanded", "true");
   sourceButton?.closest(".skill-button-wrap")?.classList.add("open");
   panel.dataset.owner = String(playerId);
+  panel.dataset.seat = player.id === 0 ? "self" : "opponent";
   panel.innerHTML = `
+    <button class="inspect-close" type="button" data-close-skill-inspect aria-label="关闭技能说明">×</button>
     <div class="inspect-head">
       <span>${player.hero.city}</span>
       <strong>${player.hero.name} · ${SKILL_NAMES[player.hero.id] ?? "主动技能"}</strong>
@@ -1688,6 +1690,7 @@ function closeSkillInspect() {
   if (!panel || panel.classList.contains("hidden")) return false;
   panel.classList.add("hidden");
   panel.removeAttribute("data-owner");
+  panel.removeAttribute("data-seat");
   panel.removeAttribute("style");
   return true;
 }
@@ -1701,7 +1704,7 @@ function renderHeroPortrait(hero, className = "") {
   const label = `${hero.name}头像`;
   return `
     <div class="${classes}" style="${avatarStyle(hero)}" data-hero-id="${hero.id}" data-mark="${hero.mark || ""}">
-      <img src="${heroPortraitSrc(hero)}" alt="${label}" loading="eager" decoding="async" />
+      <img src="${heroPortraitSrc(hero)}" alt="${label}" loading="eager" decoding="async" onerror="this.closest('.hero-portrait')?.classList.add('portrait-fallback'); this.remove();" />
     </div>
   `;
 }
@@ -1711,7 +1714,8 @@ function setHeroPortraitElement(node, hero) {
   node.setAttribute("style", avatarStyle(hero));
   node.dataset.heroId = hero.id;
   node.dataset.mark = hero.mark || "";
-  node.innerHTML = `<img src="${heroPortraitSrc(hero)}" alt="${hero.name}头像" loading="eager" decoding="async" />`;
+  node.classList.remove("portrait-fallback");
+  node.innerHTML = `<img src="${heroPortraitSrc(hero)}" alt="${hero.name}头像" loading="eager" decoding="async" onerror="this.closest('.hero-portrait')?.classList.add('portrait-fallback'); this.remove();" />`;
 }
 
 function avatarStyle(hero) {
@@ -2224,10 +2228,31 @@ function runUiAudit() {
   const lastActionNodes = [...document.querySelectorAll(".seat-last-action")].filter(visible);
   const recommendedButtons = [...document.querySelectorAll("#playActions button.recommended")].filter(visible);
   const visibleActionButtons = [...document.querySelectorAll("#bidActions button, #playActions button")].filter(visible);
+  const rectOf = (selector) => {
+    const node = document.querySelector(selector);
+    return node && visible(node) ? node.getBoundingClientRect() : null;
+  };
+  const intersects = (a, b, pad = 0) =>
+    Boolean(a && b && a.left < b.right - pad && a.right > b.left + pad && a.top < b.bottom - pad && a.bottom > b.top + pad);
+  const actionRect = rectOf(".action-panel");
+  const selfSkillRect = rectOf(".self-skill");
+  const handRect = rectOf(".player-seat.self .hand");
+  const logRect = rectOf(".log-wrap");
+  const criticalOverlaps = [
+    ["action/selfSkill", actionRect, selfSkillRect],
+    ["action/hand", actionRect, handRect],
+    ["action/log", actionRect, logRect],
+  ]
+    .filter(([, a, b]) => intersects(a, b, 3))
+    .map(([name]) => name);
+  const portraitImages = [...document.querySelectorAll(".hero-portrait img")];
+  const brokenPortraits = portraitImages
+    .filter((image) => image.complete && image.naturalWidth === 0)
+    .map((image) => image.closest(".hero-portrait")?.dataset.heroId || image.getAttribute("alt") || "unknown");
   const actionButtonsDetailed =
     state.phase === "hero" ||
     state.phase === "over" ||
-    (visibleActionButtons.length > 0 && visibleActionButtons.every((button) => button.querySelector(".action-label") && button.querySelector("small")));
+    (visibleActionButtons.length > 0 && visibleActionButtons.every((button) => button.querySelector(".action-label")));
   const resultPanel = document.querySelector(".result-panel");
   const overlayCount = ["guideOverlay", "catalogOverlay", "settingsOverlay"].filter((id) => visible(el(id))).length;
   const bodyText = document.body.innerText || "";
@@ -2249,6 +2274,11 @@ function runUiAudit() {
     singleSkillOk,
     visibleSkillButtons: skillButtons.length,
     visibleSkillSlots,
+    portraitImages: portraitImages.length,
+    brokenPortraits,
+    portraitFallbacks: [...document.querySelectorAll(".hero-portrait.portrait-fallback")].map((node) => node.dataset.heroId || "unknown"),
+    skillInspectAvailable: Boolean(el("skillInspectPanel")),
+    criticalOverlaps,
     decisionCoachVisible: !state.players.length || visible(decisionCoach),
     decisionCoachText: decisionCoach?.innerText?.slice(0, 80) ?? "",
     roundProgressVisible: state.phase !== "play" || visible(roundProgress),
@@ -2277,6 +2307,9 @@ function runUiAudit() {
     phaseButtonsOk &&
     singleSkillOk &&
     visibleSkillSlots === 0 &&
+    brokenPortraits.length === 0 &&
+    Boolean(el("skillInspectPanel")) &&
+    criticalOverlaps.length === 0 &&
     (!state.players.length || visible(decisionCoach)) &&
     (state.phase !== "play" || visible(roundProgress)) &&
     (!state.players.length || lastActionNodes.length === state.players.length) &&
