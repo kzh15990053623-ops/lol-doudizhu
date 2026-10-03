@@ -1,0 +1,53 @@
+:root {
+  color-scheme: dark;
+  --ink-950: #020a0d;
+  --ink-900: #061419;
+  --ink-800: #0a252a;
+  --teal-700: #1d5658;
+  --teal-500: #438d88;
+  --gold-200: #f0d998;
+  --gold-300: #d9b765;
+  --gold-400: #bd9440;
+  --gold-500: #8e6828;
+  --text-strong: #f3efe1;
+  --text-muted: #c0cbc7;
+  --text-dim: #82928f;
+  --danger: #dd735f;
+  --focus: #7ce7de;
+  --font-display: "STKaiti", "KaiTi", "Noto Serif SC", "Songti SC", Georgia, serif;
+  --font-ui: Inter, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --radius-xs: 0.3rem;
+  --radius-sm: 0.55rem;
+  --radius-md: 0.8rem;
+  --radius-lg: 1.05rem;
+  --motion-fast: 150ms;
+  --motion-medium: 280ms;
+  --ease-out: cubic-bezier(0.2, 0.75, 0.25, 1);
+  --layer-hud: 10;
+  --layer-dialog: 100;
+  --layer-orientation: 1000;
+  --asset-table: url("../assets/runtime/table.webp");
+  --asset-hud: url("../assets/runtime/ui/hud-frame.webp");
+  --asset-gold-button: url("../assets/runtime/ui/gold-button.webp");
+  --asset-orb: url("../assets/runtime/ui/tool-orb.webp");
+  --asset-table-cinematic: url("../assets/runtime/table-cinematic.webp");
+  --asset-card-back: url("../assets/runtime/card-back.webp");
+  /* 曜石鎏金（史诗CG卡牌体系） */
+  --obs-900: #0a0e18;
+  --obs-800: #141c30;
+  --obs-700: #232f4d;
+  --gild-100: #f7e7bd;
+  --gild-200: #e8cf94;
+  --gild-300: #c9a45c;
+  --gild-500: #7a5f2e;
+  --crimson-300: #ff8a76;
+  --crimson-500: #e0564b;
+  --font-engraved: "STZhongsong", "SimSun", "Noto Serif SC", Georgia, serif;
+  /* 复用牌桌现有材质，供选秀、弹窗和信息横幅共享。 */
+  --panel-obsidian: linear-gradient(165deg, rgba(16,22,38,.88), rgba(7,10,18,.92));
+  --border-gilded: rgb(201 164 92 / 42%);
+  --button-obsidian: linear-gradient(180deg, rgba(20,28,48,.94), rgba(8,12,22,.96));
+  --button-gold: linear-gradient(180deg, #f7e7bd 0%, #d9b878 45%, #9a7b3f 100%);
+  --button-crimson: linear-gradient(180deg, #6e1f18, #3d0f0b);
+  --title-shadow: 0 2px 8px rgb(0 0 0 / 70%);
+}

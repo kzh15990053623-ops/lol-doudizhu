@@ -1,0 +1,35 @@
+# Local agent and audit workspaces
+.agents/
+.audit-output/
+.codex-remote-attachments/
+.npm-cache/
+.workbuddy/
+
+# Local environment configuration
+.env
+.env.*
+!.env.example
+
+# Local preview/share logs
+debug.log
+*.log
+localhostrun*
+localtunnel*
+
+# Generated upload bundles
+github-upload-ready/
+
+# Dependency/build output
+node_modules/
+coverage/
+dist/
+build/
+.cache/
+output/
+test-results/
+playwright-report/
+.playwright-cli/
+
+# OS/editor noise
+.DS_Store
+Thumbs.db

@@ -1,0 +1,59 @@
+.portrait {
+  --portrait-size: 4.5rem;
+  position: relative;
+  display: inline-grid;
+  inline-size: var(--portrait-size);
+  block-size: var(--portrait-size);
+  flex: 0 0 auto;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--hero-color), var(--gold-300) 42%);
+  border-radius: 50% 50% 44% 44%;
+  background: color-mix(in srgb, var(--hero-color), var(--ink-950) 68%);
+  box-shadow: inset 0 0 0 3px rgb(5 16 22 / 62%), 0 10px 24px rgb(0 0 0 / 34%);
+  isolation: isolate;
+}
+
+.portrait::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(180deg, transparent 55%, rgb(4 11 16 / 76%));
+  pointer-events: none;
+}
+
+.portrait img {
+  inline-size: 100%;
+  block-size: 125%;
+  object-fit: cover;
+  object-position: 50% 18%;
+}
+
+.mark {
+  position: absolute;
+  inset-inline-end: 0.3rem;
+  inset-block-end: 0.2rem;
+  z-index: 2;
+  color: var(--gold-200);
+  font: 700 0.68rem/1 var(--font-display);
+  text-shadow: 0 1px 2px #000;
+}
+
+.small {
+  --portrait-size: 3.25rem;
+}
+
+.medium {
+  --portrait-size: 4.5rem;
+}
+
+.large {
+  --portrait-size: clamp(7rem, 12vw, 10rem);
+  border-radius: 44% 44% 18% 18%;
+}
+
+@media (orientation: landscape) and (max-width: 900px), (orientation: landscape) and (max-height: 680px) {
+  .small {
+    --portrait-size: 2.75rem;
+  }
+}

@@ -1,0 +1,308 @@
+.draft {
+  display: grid;
+  min-block-size: 0;
+  padding: clamp(1rem, 2.2vh, 1.75rem) clamp(1rem, 3vw, 2.5rem) clamp(1.25rem, 3vh, 2.25rem);
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: clamp(1rem, 2.5vh, 1.8rem);
+  overflow: auto;
+  background:
+    radial-gradient(ellipse at 50% -10%, rgb(35 47 77 / 36%), transparent 45%),
+    linear-gradient(180deg, rgb(4 8 16 / 55%), rgb(2 4 9 / 85%));
+}
+
+.intro {
+  display: grid;
+  justify-items: center;
+  text-align: center;
+}
+
+.intro p {
+  margin: 0 0 0.35rem;
+  color: var(--gild-200);
+  font: 700 0.75rem/1 var(--font-ui);
+  letter-spacing: 0.24em;
+}
+
+.intro h1 {
+  margin: 0;
+  color: var(--gild-100);
+  font: 700 clamp(1.85rem, 4.2vh, 3rem)/1.08 var(--font-engraved);
+  letter-spacing: 0.08em;
+  text-shadow: var(--title-shadow);
+}
+
+.intro > span {
+  max-inline-size: 45rem;
+  margin-block-start: 0.55rem;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  line-height: 1.55;
+}
+
+.cards {
+  display: grid;
+  inline-size: min(100%, 70rem);
+  min-block-size: 0;
+  margin-inline: auto;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(0.7rem, 1.6vw, 1.35rem);
+  align-items: start;
+}
+
+.heroCard {
+  position: relative;
+  display: grid;
+  min-inline-size: 0;
+  padding: clamp(0.7rem, 1.2vw, 1rem);
+  grid-template-rows: auto auto auto auto;
+  gap: 0.65rem;
+  overflow: hidden;
+  border: 1px solid var(--border-gilded);
+  border-radius: 10px;
+  background: var(--panel-obsidian);
+  box-shadow: 0 10px 26px rgb(0 0 0 / 55%), inset 0 0 0 1px rgb(240 217 160 / 8%);
+  transform: translateY(0);
+  transition: transform var(--motion-medium) var(--ease-out), opacity var(--motion-medium) ease;
+}
+
+.heroCard::after {
+  content: attr(data-mark);
+  position: absolute;
+  inset: auto -0.4rem -1.4rem auto;
+  z-index: 0;
+  color: rgb(201 164 92 / 8%);
+  font: 700 8rem/1 var(--font-engraved);
+  pointer-events: none;
+}
+
+.heroCard > * {
+  position: relative;
+  z-index: 1;
+}
+
+.heroCard:hover {
+  transform: translateY(-0.35rem);
+}
+
+.art {
+  display: grid;
+  min-block-size: 7.5rem;
+  grid-template-columns: auto 1fr;
+  gap: 0.8rem;
+  align-items: end;
+  border-block-end: 1px solid rgb(201 164 92 / 22%);
+}
+
+.art > span:first-child {
+  border-color: var(--border-gilded);
+  background: var(--obs-900);
+  box-shadow: inset 0 0 0 3px rgb(10 14 24 / 80%), 0 8px 20px rgb(0 0 0 / 60%);
+}
+
+.art > div:last-child {
+  padding-block-end: 0.7rem;
+}
+
+.art > div:last-child > span,
+.art small {
+  display: block;
+  color: var(--gild-200);
+  font: 700 0.75rem/1 var(--font-ui);
+  letter-spacing: 0.16em;
+}
+
+.art > div:last-child > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.art > div:last-child > span::before {
+  content: "";
+  inline-size: 6px;
+  block-size: 6px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: var(--hero-color);
+}
+
+.art h2 {
+  margin: 0.2rem 0 0.35rem;
+  color: var(--gild-100);
+  font: 700 clamp(1.35rem, 2.3vw, 2rem)/1 var(--font-engraved);
+  text-shadow: var(--title-shadow);
+}
+
+.art small {
+  color: var(--text-dim);
+  letter-spacing: 0.08em;
+}
+
+.mechanics {
+  display: grid;
+  align-content: start;
+  gap: 0.5rem;
+}
+
+.mechanics section {
+  padding: 0.7rem 0.75rem;
+  border-inline-start: 2px solid var(--gild-300);
+  background: rgb(6 9 17 / 56%);
+}
+
+.mechanics section.passive {
+  border-inline-start-color: var(--gild-500);
+}
+
+.mechanics span {
+  color: var(--gild-200);
+  font: 700 0.75rem/1 var(--font-ui);
+  letter-spacing: 0.14em;
+}
+
+.mechanics h3 {
+  margin: 0.28rem 0 0.32rem;
+  color: var(--gild-100);
+  font: 600 0.94rem/1.15 var(--font-engraved);
+  text-shadow: var(--title-shadow);
+}
+
+.mechanics p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: clamp(0.75rem, 1.05vw, 0.8rem);
+  line-height: 1.48;
+}
+
+.detailButton,
+.chooseButton {
+  position: relative;
+  z-index: 1;
+  min-block-size: 2.75rem;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-family: var(--font-engraved);
+  letter-spacing: 2px;
+}
+
+.detailButton {
+  border: 1px solid var(--border-gilded);
+  color: var(--gild-200);
+  background: var(--button-obsidian);
+  box-shadow: 0 6px 16px rgb(0 0 0 / 45%);
+}
+
+.chooseButton {
+  border: 1px solid var(--gild-100);
+  color: #151108;
+  font-weight: 800;
+  background: var(--button-gold);
+  text-shadow: 0 1px 0 rgb(255 255 255 / 35%);
+  box-shadow: 0 8px 22px rgb(0 0 0 / 55%), 0 0 24px rgb(201 164 92 / 30%);
+}
+
+.detailButton:not(:disabled):hover,
+.draftTools button:not(:disabled):hover {
+  border-color: var(--gild-200);
+  box-shadow: 0 6px 16px rgb(0 0 0 / 45%), 0 0 14px rgb(240 217 160 / 20%);
+}
+
+.detailButton:not(:disabled):active,
+.chooseButton:not(:disabled):active,
+.draftTools button:not(:disabled):active {
+  transform: translateY(2px);
+}
+
+@media (orientation: landscape) and (max-width: 900px), (orientation: landscape) and (max-height: 680px) {
+  .draft {
+    padding: 0.5rem 0.75rem 0.75rem;
+    gap: 0.55rem;
+  }
+
+  .intro p,
+  .intro > span {
+    display: none;
+  }
+
+  .intro h1 {
+    font-size: 1.3rem;
+  }
+
+  .cards {
+    gap: 0.5rem;
+  }
+
+  .heroCard {
+    padding: 0.5rem;
+    gap: 0.35rem;
+  }
+
+  .art {
+    min-block-size: 4rem;
+  }
+
+  .art h2 {
+    font-size: 1rem;
+  }
+
+  .mechanics {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.3rem;
+  }
+
+  .mechanics section {
+    padding: 0.35rem 0.45rem;
+  }
+
+  .mechanics p {
+    display: -webkit-box;
+    overflow: hidden;
+    font-size: 0.75rem;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .mechanics h3 {
+    margin-block: 0.15rem;
+    font-size: 0.75rem;
+  }
+
+  .detailButton,
+  .chooseButton {
+    min-block-size: 2.75rem;
+    font-size: 0.75rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .heroCard {
+    transition: none;
+  }
+}
+.draftTools { display:flex; gap:12px; margin-top:10px; }
+.draftTools button { min-height:44px; padding:6px 12px; color:var(--gild-200); background:var(--button-obsidian); border:1px solid var(--border-gilded); border-radius:6px; font:600 14px/1.2 var(--font-engraved); letter-spacing:1px; box-shadow:0 6px 16px rgb(0 0 0 / 45%); }
+.mechanics p { font-size:14px; }
+@media (orientation:landscape) and (max-width:900px), (orientation:landscape) and (max-height:680px) {
+  .intro { grid-template-columns:1fr auto; gap:8px; text-align:left; justify-items:start; }
+  .intro h1 { font-size:20px; align-self:center; }
+  .draftTools { margin:0; gap:6px; }
+  .draftTools button { font-size:14px; padding:4px 8px; }
+  .cards { align-items:stretch; }
+  .art { min-height:60px; gap:6px; }
+  .art > span:first-child { --portrait-size:60px; }
+  .art h2 { font-size:18px; }
+  .art small { display:none; }
+  .mechanics { grid-template-columns:1fr 1fr; }
+  .mechanics h3 { display:none; }
+  .mechanics p { font-size:12px; -webkit-line-clamp:2; }
+  .mechanics span { font-size:12px; }
+  .detailButton,.chooseButton { font-size:14px; }
+}
+@media (min-width:901px) and (min-height:681px) {
+  .draft { padding:12px 24px 16px; gap:12px; }
+  .intro h1 { font-size:30px; }
+  .intro > span { margin-top:6px; }
+  .draftTools { margin-top:8px; }
+  .art > span:first-child { --portrait-size:112px; }
+  .art { min-height:112px; }
+}

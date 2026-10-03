@@ -1,0 +1,356 @@
+/* ========== 曜石鎏金卡牌体系（史诗CG方向 · 第二迭代） ==========
+   统一角标：全部 54 张牌左上角 = 点数 + 传统花色 ♠♥♣♦（快速认牌）
+   王牌角标：竖排「大王 / 小王」，大王暖金、小王冷银蓝
+   牌面中央：符文花色（利刃/生命水晶/三相之叶/海克斯宝石）承担主题表达
+   花牌与王牌：英雄绘框（立绘窗 + 底部英雄名横带，LoR 式排版） */
+
+.card,
+.staticCard {
+  position: relative;
+  flex: 0 0 auto;
+  aspect-ratio: 0.69;
+  overflow: hidden;
+  color: var(--gild-100);
+  border: 1px solid rgb(201 164 92 / 85%);
+  border-radius: 0.5rem;
+  background:
+    radial-gradient(120% 90% at 30% 0%, var(--obs-700) 0%, var(--obs-800) 42%, var(--obs-900) 100%);
+  box-shadow:
+    0 8px 18px rgb(0 0 0 / 55%),
+    inset 0 0 0 3px rgb(10 14 24 / 90%),
+    inset 0 0 0 4px rgb(201 164 92 / 32%),
+    inset 0 0 30px rgb(4 6 12 / 75%);
+}
+
+.card {
+  inline-size: 72px;
+  cursor: pointer;
+  transform: rotate(var(--r, 0deg)) translateY(0);
+  transform-origin: 50% 130%;
+  transition:
+    transform var(--motion-fast) var(--ease-out),
+    box-shadow var(--motion-fast) ease;
+}
+
+.card:hover {
+  transform: rotate(var(--r, 0deg)) translateY(-0.3rem);
+}
+
+.card.selected {
+  transform: rotate(var(--r, 0deg)) translateY(-1.05rem);
+  border-color: var(--gild-100);
+  box-shadow:
+    0 16px 30px rgb(0 0 0 / 70%),
+    0 0 22px rgb(240 217 160 / 40%),
+    inset 0 0 0 3px rgb(10 14 24 / 90%),
+    inset 0 0 0 4px rgb(240 217 160 / 70%);
+}
+
+/* 焦点框收进牌内侧，避免被滚动容器 overflow 裁切 */
+.card:focus-visible {
+  z-index: 8;
+  outline: 3px solid var(--focus);
+  outline-offset: -3px;
+}
+
+/* ---------- 鎏金蚀刻层 ---------- */
+
+.filigree {
+  position: absolute;
+  inset: 4px;
+  z-index: 5;
+  pointer-events: none;
+  opacity: 0.9;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='36' height='36'%3E%3Cpath d='M34 2 H12 Q4 2 4 10 V34' stroke='%23c9a45c' stroke-width='1.1' fill='none'/%3E%3Cpath d='M30 6 H14 Q8 6 8 12 V30' stroke='%23c9a45c' stroke-width='0.7' fill='none' opacity='0.6'/%3E%3Ccircle cx='5' cy='5' r='1.4' fill='%23f0d9a0'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='36' height='36'%3E%3Cg transform='translate(36 0) scale(-1 1)'%3E%3Cpath d='M34 2 H12 Q4 2 4 10 V34' stroke='%23c9a45c' stroke-width='1.1' fill='none'/%3E%3Cpath d='M30 6 H14 Q8 6 8 12 V30' stroke='%23c9a45c' stroke-width='0.7' fill='none' opacity='0.6'/%3E%3Ccircle cx='5' cy='5' r='1.4' fill='%23f0d9a0'/%3E%3C/g%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='36' height='36'%3E%3Cg transform='translate(0 36) scale(1 -1)'%3E%3Cpath d='M34 2 H12 Q4 2 4 10 V34' stroke='%23c9a45c' stroke-width='1.1' fill='none'/%3E%3Cpath d='M30 6 H14 Q8 6 8 12 V30' stroke='%23c9a45c' stroke-width='0.7' fill='none' opacity='0.6'/%3E%3Ccircle cx='5' cy='5' r='1.4' fill='%23f0d9a0'/%3E%3C/g%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='36' height='36'%3E%3Cg transform='translate(36 36) scale(-1 -1)'%3E%3Cpath d='M34 2 H12 Q4 2 4 10 V34' stroke='%23c9a45c' stroke-width='1.1' fill='none'/%3E%3Cpath d='M30 6 H14 Q8 6 8 12 V30' stroke='%23c9a45c' stroke-width='0.7' fill='none' opacity='0.6'/%3E%3Ccircle cx='5' cy='5' r='1.4' fill='%23f0d9a0'/%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position:
+    0 0,
+    100% 0,
+    0 100%,
+    100% 100%;
+  background-size: 15px 15px;
+}
+
+.sheen {
+  position: absolute;
+  inset: 0;
+  z-index: 7;
+  pointer-events: none;
+  border-radius: inherit;
+  background: linear-gradient(118deg, rgb(255 255 255 / 13%) 0%, rgb(255 255 255 / 3%) 22%, transparent 40%);
+}
+
+/* ---------- 统一角标识别区（手牌与中央牌同结构） ---------- */
+
+.corner {
+  position: absolute;
+  inset-block-start: 6px;
+  inset-inline-start: 7px;
+  z-index: 8;
+  display: grid;
+  justify-items: center;
+  line-height: 1;
+}
+
+.corner b {
+  font: 700 15px/1.05 Georgia, "Times New Roman", serif;
+  letter-spacing: -0.5px;
+}
+
+.cornerSuit {
+  margin-block-start: 2px;
+  font: 400 11px/1 Georgia, "Times New Roman", serif;
+  font-style: normal;
+}
+
+/* 王牌角标：两字同列竖排，同字号 */
+.joker .corner b {
+  font-size: 14px;
+  line-height: 1.15;
+}
+
+/* 黑花色 = 暖金，红花色 = 赤红 */
+.corner b { color: #f3e7cd; text-shadow: 0 0 10px rgb(240 217 160 / 45%); }
+.cornerSuit { color: var(--gild-200); }
+.red .corner b { color: var(--crimson-300); text-shadow: 0 0 10px rgb(224 86 75 / 60%); }
+.red .cornerSuit { color: var(--crimson-300); }
+
+/* 王牌角标配色：大王暖金（显式覆盖 .red 的赤红染色）、小王冷银蓝 */
+.joker.red .corner b { color: var(--gild-100); text-shadow: 0 0 12px rgb(240 217 160 / 75%); }
+.joker:not(.red) .corner b { color: #c3d9ec; text-shadow: 0 0 12px rgb(150 200 240 / 60%); }
+
+/* 立绘卡：角标垫深色底托，保证任何立绘上都可读 */
+.artCard .corner {
+  inset-block-start: 5px;
+  inset-inline-start: 5px;
+  padding: 3px 4px 4px;
+  border: 1px solid rgb(201 164 92 / 45%);
+  border-radius: 4px;
+  background: linear-gradient(180deg, rgb(6 8 14 / 88%), rgb(6 8 14 / 70%));
+}
+
+/* 选中勾：放左侧可见列（角标下方），扇形叠放时不会被右邻牌遮挡 */
+.checkMark {
+  position: absolute;
+  inset-block-start: 42px;
+  inset-inline-start: 8px;
+  z-index: 9;
+  display: grid;
+  place-items: center;
+  inline-size: 15px;
+  block-size: 15px;
+  border: 1px solid #fff3d0;
+  border-radius: 50%;
+  font: 800 10px/1 Georgia, serif;
+  color: #221604;
+  background: linear-gradient(135deg, #f7e7bd, #c9a45c);
+  box-shadow:
+    0 2px 6px rgb(0 0 0 / 65%),
+    0 0 10px rgb(240 217 160 / 55%);
+}
+
+/* ---------- 数字卡：符文花色（中央主题表达） ---------- */
+
+.runes {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  z-index: 3;
+  inline-size: 62%;
+  block-size: auto;
+  transform: translate(-50%, -50%);
+}
+
+.centerIcon {
+  position: absolute;
+  inset: 54% auto auto 50%;
+  z-index: 4;
+  inline-size: 34%;
+  block-size: auto;
+  transform: translate(-50%, -50%);
+}
+
+.suitTitle {
+  position: absolute;
+  inset: auto 0 5px;
+  z-index: 6;
+  font: 400 7px/1 var(--font-engraved);
+  letter-spacing: 2px;
+  text-align: center;
+  color: rgb(232 207 148 / 62%);
+  text-indent: 2px;
+}
+
+.centerIcon { color: var(--gild-300); filter: drop-shadow(0 0 8px rgb(201 164 92 / 65%)); }
+.red .centerIcon { color: var(--crimson-500); filter: drop-shadow(0 0 8px rgb(224 86 75 / 70%)); }
+
+/* ---------- 英雄绘框卡（A/K/Q/J/王） ---------- */
+
+.artWindow {
+  position: absolute;
+  inset: 5px 5px 20px;
+  z-index: 2;
+  overflow: hidden;
+  border: 1px solid rgb(201 164 92 / 55%);
+  box-shadow:
+    inset 0 0 0 2px rgb(10 14 24 / 80%),
+    inset 0 0 18px rgb(0 0 0 / 50%);
+}
+
+.artWindow img {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+  object-position: center 18%;
+  filter: brightness(1.1) saturate(1.06);
+}
+
+.artWindow::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgb(6 8 14 / 22%), transparent 30%, transparent 72%, rgb(6 8 14 / 55%));
+}
+
+/* 底部英雄名横带（花牌带符文小图标，王牌带鎏金菱饰） */
+.nameBand {
+  position: absolute;
+  inset: auto 0 0;
+  z-index: 6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  block-size: 17px;
+  background: linear-gradient(0deg, rgb(8 11 20 / 97%), rgb(8 11 20 / 80%));
+  border-block-start: 1px solid rgb(201 164 92 / 55%);
+  border-radius: 0 0 0.5rem 0.5rem;
+}
+
+.nameBand b {
+  overflow: hidden;
+  font: 700 8px/1 var(--font-engraved);
+  letter-spacing: 0.5px;
+  color: var(--gild-200);
+  white-space: nowrap;
+}
+
+.bandIcon {
+  inline-size: 8px;
+  block-size: 8px;
+  flex: 0 0 auto;
+  color: var(--gild-200);
+}
+
+.red .bandIcon { color: var(--crimson-300); }
+
+.bandGem {
+  inline-size: 4px;
+  block-size: 4px;
+  flex: 0 0 auto;
+  transform: rotate(45deg);
+  background: linear-gradient(135deg, var(--gild-100), var(--gild-500));
+}
+
+/* 王牌基底：大王鎏金 / 小王冰蓝 */
+.joker.red {
+  border-color: var(--gild-100);
+  background: radial-gradient(120% 90% at 30% 0%, #3d2c12 0%, #1d1508 45%, #0c0903 100%);
+}
+
+.joker:not(.red) {
+  border-color: rgb(150 190 225 / 70%);
+  background: radial-gradient(120% 90% at 30% 0%, #1c2a3d 0%, #0e1626 45%, #070b14 100%);
+}
+
+/* 手牌叠放时隐藏辅助文字（底部横带/花色名），立绘延伸到底，保持牌面干净 */
+.card .nameBand,
+.card .suitTitle { display: none; }
+
+.card .artWindow { inset: 5px; }
+
+/* ---------- 尺寸变体 ---------- */
+
+.compact {
+  inline-size: clamp(2.1rem, 3.2vw, 2.9rem);
+  border-radius: 0.35rem;
+  pointer-events: none;
+}
+
+.compact .corner b { font-size: 10px; }
+.compact .cornerSuit { font-size: 8px; margin-block-start: 1px; }
+.compact .nameBand,
+.compact .suitTitle,
+.compact .filigree { display: none; }
+.compact .artWindow { inset: 4px; }
+
+.tableCard {
+  inline-size: var(--table-card-width, 84px);
+  transform: rotate(var(--tr, 0deg));
+}
+
+.tableCard:nth-child(3n + 1) { --tr: -2.4deg; }
+.tableCard:nth-child(3n) { --tr: 2.4deg; }
+
+.tableCard + .tableCard { margin-inline-start: calc(-1 * var(--table-overlap, 12px)); }
+
+/* 历史牌：独立小尺寸规格（不套用手牌/中央牌角标字号） */
+.historyCard {
+  inline-size: 28px;
+  border-radius: 0.25rem;
+  box-shadow:
+    0 3px 7px rgb(0 0 0 / 40%),
+    inset 0 0 0 2px rgb(10 14 24 / 90%),
+    inset 0 0 0 3px rgb(201 164 92 / 30%);
+}
+
+.historyCard + .historyCard { margin-inline-start: -0.5rem; }
+
+.historyCard .corner { inset-block-start: 3px; inset-inline-start: 3px; }
+.historyCard .corner b { font-size: 9px; }
+.historyCard .cornerSuit { font-size: 7px; margin-block-start: 1px; }
+.historyCard .runes { display: none; }
+.historyCard .centerIcon { inline-size: 42%; inset-block-start: 58%; }
+
+/* ---------- 移动端横屏 ---------- */
+
+@media (orientation: landscape) and (max-width: 900px), (orientation: landscape) and (max-height: 680px) {
+  .card {
+    inline-size: 56px;
+    border-radius: 0.35rem;
+  }
+
+  .card.selected { transform: rotate(var(--r, 0deg)) translateY(-0.5rem); }
+
+  /* 角标列宽约 16px：距左 5px、距顶 4px，字号 12px 行高 13px */
+  .corner { inset-block-start: 4px; inset-inline-start: 5px; }
+  .corner b { font-size: 12px; line-height: 13px; }
+  .cornerSuit { font-size: 9px; margin-block-start: 1px; }
+  .joker .corner b { font-size: 12px; line-height: 13px; }
+  .artCard .corner { inset-block-start: 4px; inset-inline-start: 4px; padding: 2px 3px 3px; }
+  .checkMark { inset-block-start: 34px; inset-inline-start: 6px; inline-size: 13px; block-size: 13px; font-size: 8px; }
+  .suitTitle,
+  .nameBand,
+  .filigree { display: none; }
+  .card .artWindow,
+  .artWindow { inset: 4px; }
+  .runes { inline-size: 70%; }
+
+  .tableCard { inline-size: var(--table-card-width, 56px); }
+  .tableCard .corner { inset-block-start: 3px; inset-inline-start: 4px; }
+  .tableCard .corner b { font-size: 10px; }
+  .tableCard .cornerSuit { font-size: 8px; }
+  .tableCard .artWindow { inset: 3px; }
+  .tableCard .runes { display: none; }
+  .tableCard .centerIcon { inline-size: 44%; }
+
+  .historyCard { inline-size: 22px; }
+  .historyCard + .historyCard { margin-inline-start: -0.45rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card { transition: none; }
+}

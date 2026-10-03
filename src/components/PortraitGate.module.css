@@ -1,0 +1,63 @@
+.gate {
+  position: fixed;
+  inset: 0;
+  z-index: var(--layer-orientation);
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  padding: 2rem;
+  color: var(--text-strong);
+  text-align: center;
+  background-color: #061115;
+  background-image:
+    radial-gradient(circle at 50% 35%, rgb(39 93 94 / 38%), transparent 35%),
+    linear-gradient(145deg, #061115, #0b2025 52%, #050d12);
+}
+
+.gate p {
+  margin: 1.8rem 0 0.25rem;
+  color: var(--gold-300);
+  font: 700 0.75rem/1 var(--font-ui);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.gate h2 {
+  margin: 0;
+  font: 700 clamp(2rem, 10vw, 3.4rem)/1.08 var(--font-display);
+}
+
+.gate > span:last-child {
+  max-inline-size: 23rem;
+  margin-block-start: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+.device {
+  position: relative;
+  display: block;
+  inline-size: 4.5rem;
+  block-size: 7.2rem;
+  border: 3px solid var(--gold-300);
+  border-radius: 0.65rem;
+  transform: rotate(90deg);
+}
+
+.device::before {
+  content: "";
+  position: absolute;
+  inset: 0.35rem;
+  border: 1px solid rgb(239 201 113 / 42%);
+  border-radius: 0.35rem;
+}
+
+.device i {
+  position: absolute;
+  inset: auto 50% 0.28rem auto;
+  inline-size: 0.38rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--gold-300);
+  transform: translateX(50%);
+}

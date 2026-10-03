@@ -15,19 +15,15 @@ https://voice.twitp.com/index.html
 
 在该来源中暂未找到以下英雄的详情页或可下载语音：凯特琳、阿兹尔、潘森、厄运小姐、提莫、卡莎。
 
-当前代码会按下面的默认文件名查找语音：
+当前代码通过 `src/app/heroMedia.ts` 中的 `HERO_VOICES` 显式列出可播放语音；未列入的英雄不会发起缺失文件请求。生产构建使用 `src/assets/runtime/voice/` 下的 MP3，以下列表为本目录保留的原始素材。
+
+已配置的语音键：
 
 - `garen.mp3` 或 `garen.ogg`
 - `darius.mp3`
 - `ashe.mp3` 或 `ashe.ogg`
 - `jinx.mp3`
-- `caitlyn.mp3`
 - `yasuo.mp3`
 - `thresh.mp3` 或 `thresh.ogg`
-- `azir.mp3`
-- `pantheon.mp3`
-- `missfortune.mp3`
-- `teemo.mp3`
-- `kaisa.mp3`
 
 建议使用 1-3 秒的短台词，作为技能反馈会比较干脆。

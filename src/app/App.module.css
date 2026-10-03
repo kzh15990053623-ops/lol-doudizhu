@@ -1,0 +1,38 @@
+.appShell {
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  min-block-size: 100dvh;
+  display: grid;
+  place-items: center;
+  padding:
+    var(--safe-top) var(--safe-right) var(--safe-bottom) var(--safe-left);
+  background:
+    radial-gradient(circle at 50% 18%, rgb(35 47 77 / 26%), transparent 38%),
+    var(--obs-900);
+}
+
+.gameCanvas {
+  position: relative;
+  display: grid;
+  inline-size: min(calc(100vw - var(--safe-left) - var(--safe-right)), 100rem);
+  block-size: min(calc(100dvh - var(--safe-top) - var(--safe-bottom)), 56.25rem);
+  container: game-canvas / size;
+  min-block-size: 0;
+  grid-template-rows: auto minmax(0, 1fr);
+  overflow: hidden;
+  border-inline: 1px solid rgb(198 161 76 / 12%);
+  background: var(--obs-900);
+  box-shadow: 0 0 70px rgb(0 0 0 / 58%);
+}
+
+.main {
+  min-inline-size: 0;
+  min-block-size: 0;
+  overflow: hidden;
+}
+
+.main > * {
+  block-size: 100%;
+}
